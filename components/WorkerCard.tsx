@@ -23,8 +23,8 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({
       {...attributes}
       className={`p-4 rounded-lg shadow-md cursor-pointer transition ${
         isAvailable
-          ? "bg-gradient-to-r from-green-400 to-blue-500 hover:shadow-lg"
-          : "bg-gray-300"
+          ? "bg-gradient-to-r from-green-400 to-blue-500 hover:shadow-xl hover:scale-105"
+          : "bg-gray-300 hover:shadow-xl hover:scale-105"
       }`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
