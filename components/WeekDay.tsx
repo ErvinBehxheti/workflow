@@ -8,14 +8,18 @@ interface WeekDayProps {
 }
 
 export const WeekDay: React.FC<WeekDayProps> = ({ day, assignedWorker }) => {
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: day,
   });
+
+  const dayStyle = `p-4 rounded-lg transition-all duration-200 
+  ${isOver ? 'bg-blue-100 shadow-lg' : 'bg-white'}`;
 
   return (
     <div
       ref={setNodeRef}
-      className="border border-gray-300 rounded-lg p-4 shadow-md min-h-[150px] bg-white"
+      className={dayStyle}
+      
     >
       <p className="font-semibold text-lg mb-4">{day}</p>
       {assignedWorker ? (

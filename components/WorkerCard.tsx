@@ -1,45 +1,37 @@
-import React from "react";
-import { useDraggable } from "@dnd-kit/core";
-import { motion } from "framer-motion";
-import { Worker } from "../types/Worker";
+import React from 'react';
+import { useDraggable } from '@dnd-kit/core';
+import { Worker } from '@/types/Worker';
 
 interface WorkerCardProps {
   worker: Worker;
-  isAvailable: boolean;
 }
 
-export const WorkerCard: React.FC<WorkerCardProps> = ({
-  worker,
-  isAvailable,
-}) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: worker.id.toString(),
+export const WorkerCard: React.FC<WorkerCardProps> = ({ worker }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: worker.id,
   });
 
+  // Define styles to indicate that the card is draggable
+  const cardStyle = `p-4 mb-2 rounded-lg transition-all duration-200 cursor-pointer 
+    ${isDragging ? 'shadow-xl scale-105' : 'shadow-md'} 
+    ${worker.isAvailable ? 'bg-green-100' : 'bg-red-100'}`;
+
+  const style = {
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    opacity: isDragging ? 0.75 : 1,  // Make it a bit transparent while dragging
+  };
+
   return (
-    <motion.div
-      ref={setNodeRef}
-      {...listeners}
+    <div 
+      ref={setNodeRef} 
+      style={style} 
+      className={cardStyle} 
+      {...listeners} 
       {...attributes}
-      className={`p-4 rounded-lg shadow-md cursor-pointer transition ${
-        isAvailable
-          ? "bg-gradient-to-r from-green-400 to-blue-500 hover:shadow-xl hover:scale-105"
-          : "bg-gray-300 hover:shadow-xl hover:scale-105"
-      }`}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3 }}
     >
-      <p className="font-semibold text-lg">{worker.name}</p>
-      <p className="text-sm text-gray-700">{worker.role}</p>
-      <p
-        className={`text-xs mt-2 ${
-          isAvailable ? "text-green-500" : "text-red-500"
-        }`}
-      >
-        {isAvailable ? "Available" : "Unavailable"}
-      </p>
-    </motion.div>
+      <h3 className="font-bold">{worker.name}</h3>
+      <p className="text-sm text-gray-500">{worker.role}</p>
+      <p className="text-xs text-gray-400">{worker.isAvailable ? 'Available' : 'Unavailable'}</p>
+    </div>
   );
 };
