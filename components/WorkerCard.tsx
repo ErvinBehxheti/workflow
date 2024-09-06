@@ -1,5 +1,6 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
+import { motion } from "framer-motion";
 import { Worker } from "../types/Worker";
 
 interface WorkerCardProps {
@@ -16,7 +17,7 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({
   });
 
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
       {...listeners}
       {...attributes}
@@ -25,6 +26,10 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({
           ? "bg-gradient-to-r from-green-400 to-blue-500 hover:shadow-lg"
           : "bg-gray-300"
       }`}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
     >
       <p className="font-semibold text-lg">{worker.name}</p>
       <p className="text-sm text-gray-700">{worker.role}</p>
@@ -35,6 +40,6 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({
       >
         {isAvailable ? "Available" : "Unavailable"}
       </p>
-    </div>
+    </motion.div>
   );
 };
