@@ -10,7 +10,7 @@ import { UndoModal } from "@/components/UndoModal";
 const workers: Worker[] = [
   { id: 1, name: "John Doe", role: "Developer", isAvailable: true },
   { id: 2, name: "Jane Smith", role: "Designer", isAvailable: true },
-  { id: 3, name: "Alex Johnson", role: "Tester", isAvailable: false },
+  { id: 3, name: "Alex Johnson", role: "Tester", isAvailable: true },
 ];
 
 const projects = [
@@ -125,11 +125,7 @@ const page = () => {
             {availableWorkers
               .filter((worker) => worker.isAvailable)
               .map((worker) => (
-                <WorkerCard
-                  key={worker.id}
-                  worker={worker}
-                  isAvailable={true}
-                />
+                <WorkerCard key={worker.id} worker={worker} />
               ))}
           </div>
 
@@ -140,11 +136,7 @@ const page = () => {
             {availableWorkers
               .filter((worker) => !worker.isAvailable)
               .map((worker) => (
-                <WorkerCard
-                  key={worker.id}
-                  worker={worker}
-                  isAvailable={false}
-                />
+                <WorkerCard key={worker.id} worker={worker} />
               ))}
           </div>
         </div>
