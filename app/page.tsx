@@ -5,6 +5,7 @@ import { Worker } from '@/types/Worker';
 import { ProjectCard } from '@/components/ProjectCard';
 import { WeekDay } from '@/components/WeekDay';
 import { WorkerCard } from '@/components/WorkerCard';
+import { UndoModal } from '@/components/UndoModal';
 
 const workers: Worker[] = [
   { id: 1, name: 'John Doe', role: 'Developer', isAvailable: true },
@@ -22,6 +23,8 @@ const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satur
 const page = () => {
   const [assignedWorkers, setAssignedWorkers] = useState<Record<string, Worker | null>>({});
   const [availableWorkers, setAvailableWorkers] = useState(workers);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingAssignment, setPendingAssignment] = useState<{ worker: Worker; day: string } | null>(null);
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -29,17 +32,11 @@ const page = () => {
 
     const worker = availableWorkers.find((w) => w.id === workerId);
     if (worker && over) {
-      // If dropped over a weekday, assign worker to that day and mark unavailable
+      // If worker dropped on a day, trigger modal
       const day = over.id;
 
-      setAssignedWorkers((prev) => ({
-        ...prev,
-        [day]: worker,
-      }));
-
-      setAvailableWorkers((prev) =>
-        prev.map((w) => (w.id === workerId ? { ...w, isAvailable: false } : w))
-      );
+      setPendingAssignment({ worker, day });
+      setIsModalOpen(true);
     } else if (over === null) {
       // Worker dropped back to the available/unavailable list
       setAvailableWorkers((prev) =>
@@ -56,6 +53,29 @@ const page = () => {
         return updated;
       });
     }
+  };
+
+  const handleConfirmAssignment = () => {
+    if (pendingAssignment) {
+      const { worker, day } = pendingAssignment;
+
+      // Assign the worker to the specified day
+      setAssignedWorkers((prev) => ({
+        ...prev,
+        [day]: worker,
+      }));
+
+      setAvailableWorkers((prev) =>
+        prev.map((w) => (w.id === worker.id ? { ...w, isAvailable: false } : w))
+      );
+    }
+    setIsModalOpen(false);
+    setPendingAssignment(null);
+  };
+
+  const handleCancelAssignment = () => {
+    setIsModalOpen(false);
+    setPendingAssignment(null);
   };
 
   return (
@@ -101,6 +121,14 @@ const page = () => {
               ))}
           </div>
         </div>
+
+        {/* Undo Modal */}
+        {isModalOpen && (
+          <UndoModal
+            onConfirm={handleConfirmAssignment}
+            onCancel={handleCancelAssignment}
+          />
+        )}
       </div>
     </DndContext>
   );
