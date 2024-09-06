@@ -1,27 +1,31 @@
-import { Worker } from '@/types/Worker';
-import { useDraggable } from '@dnd-kit/core';
+import React from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { Worker } from "../types/Worker";
 
-interface WorkerCardProps {
-  worker: Worker;
-  isAvailable: boolean;
+interface WeekDayProps {
+  day: string;
+  assignedWorker?: Worker | null;
 }
 
-export const WorkerCard: React.FC<WorkerCardProps> = ({ worker, isAvailable }) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: worker.id,
+export const WeekDay: React.FC<WeekDayProps> = ({ day, assignedWorker }) => {
+  const { setNodeRef } = useDroppable({
+    id: day,
   });
 
   return (
     <div
       ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      className={`p-4 rounded-lg shadow-md cursor-pointer ${
-        isAvailable ? 'bg-gradient-to-r from-green-400 to-blue-500' : 'bg-gray-300'
-      }`}
+      className="border border-gray-300 rounded-lg p-4 shadow-md min-h-[150px] bg-white"
     >
-      <p className="font-semibold text-lg">{worker.name}</p>
-      <p className="text-sm text-gray-700">{worker.role}</p>
+      <p className="font-semibold text-lg mb-4">{day}</p>
+      {assignedWorker ? (
+        <div className="p-2 bg-gradient-to-r from-purple-400 to-blue-500 text-white rounded-lg shadow">
+          <p>{assignedWorker.name}</p>
+          <p className="text-sm">{assignedWorker.role}</p>
+        </div>
+      ) : (
+        <p className="text-sm text-gray-500">No worker assigned</p>
+      )}
     </div>
   );
 };
