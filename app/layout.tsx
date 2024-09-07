@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Poppins } from 'next/font/google'
 import "./globals.css";
 
 const geistSans = localFont({
@@ -12,6 +13,11 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+export const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: "400"
+})
 
 export const metadata: Metadata = {
   title: "Workflow",
@@ -26,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} antialiased`}
       >
         {children}
       </body>
