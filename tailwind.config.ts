@@ -12,6 +12,10 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundColor: {
+        dashboardColor: "#191D24",
+        viewColor: "#232935"
+      }
     },
   },
   plugins: [],
